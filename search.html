@@ -1,0 +1,22 @@
+<h3>Search and buy music</h3>
+<form action="/search_result" method="GET">  
+    <label for="artist">Artist</label>
+    <input type="radio" name="chooseone" id="artist" value="1">
+    <div><label for="songname">Song name</label>
+        <input type="radio" name="chooseone" id="songname" value="2"></div>
+    <div><label for="genre">Genre</label>
+        <input type="radio" name="chooseone" id="genre" value="3"></div>
+    <input type="text" name="searchword"> 
+    <input type="submit" value="Search">
+</form>
+<hr>
+
+<p>Songs already bought:</p>
+<br>
+{% for song in results %}
+<li> {{ song.artist }} - {{ song.track }} 
+{% endfor %}
+</ul>
+<hr>
+<a href="/">Back</a>
+

@@ -1,0 +1,18 @@
+<h2>Upload your song</h2>
+<form action="/upload" method="POST">
+<p>Biisin nimi:<br>
+<input type="text" name="songname"></p>
+<p>Genre:<br>
+<input type="texr" name="genre"></p>
+<input type="submit" value="Lisää">
+</form>
+<hr>
+<p>Tracks you have already uploaded:</p>
+<br>
+{% for song in results %}
+<li> {{ song.track }} - {{ song.genre }} 
+{% endfor %}
+</ul>
+<hr>
+<p>You have earned {{ bought}} euros</p>
+<a href="/">Takaisin</a>

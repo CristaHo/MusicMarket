@@ -1,0 +1,22 @@
+{% if session.username %}
+<h1>MusicMarket</h1>
+<p>You are logged in with the username: {{ session.username }}</p>
+<br>
+<p>You have uploaded {{ uploaded }} tracks and earned {{ earned }} euros.</p>
+<p>You have bought {{ bought }} tracks</p>
+<br>
+<button><a href="/search">Buy and search for music</a></button>
+<button><a href="/upload">Upload your songs</a></button>
+<br>
+<hr>
+<a href="/logout">Log out</a>
+{% else %}
+<form action="/login" method="POST">
+<p>Username:<br>
+<input type="text" name="username"></p>
+<p>Password:<br>
+<input type="password" name="password"></p>
+<input type="submit" value="Login">
+</form>
+<p>No account yet? <button><a href="/register">Register new account</a></button>
+{% endif %}

@@ -1,0 +1,10 @@
+<table>
+{% for song in results %}
+<tr> <td>{{ song.artist }}</td> 
+    <td>-</td>
+    <td>{{ song.track }}</td>
+    <td><form action="/buy_song" method="POST">
+        <input type="hidden" name="id" value="{{ song.id }}">
+        <input type="submit" value="Buy"> </form></td></tr>
+{% endfor %}
+</table>
