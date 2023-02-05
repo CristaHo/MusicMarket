@@ -12,5 +12,9 @@ Toiminnot:
   - Kappaleille voi antaa tykkäyksiä/kommentteja
 
 Tällä hetkellä sovelluksessa toimivat muut ominaisuudet paitsi tykkäys/kommentointi.
+Sovellukseen voi luoda uuden käyttäjän ja kirjautua sillä siään.
+Kappaletta haettaessa tulee valita jokin hakukriteeri, jotta haku onnistuu.
+Tietokantaan on tallennettu yksi kappale nimellä TheArtist - TheTrack, genrenä rock.
+Kappaleita ladattaessa näkyy alhaalla jo ladatut omat kappaleet, sekä kuinka monen euon edestä kappaleita on ostettu. 
 
-# MusicMarket
+
