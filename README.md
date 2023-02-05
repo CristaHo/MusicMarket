@@ -20,22 +20,22 @@ Kappaleita ladattaessa näkyy alhaalla jo ladatut omat kappaleet, sekä kuinka m
 
 Sovellus ei ole vielä saatavilla fly.io:ssa, sillä en kerennyt saada sitä toimimaan.
 
-Käyynistysohjeet:
+Käynnistysohjeet:
 
 1. Kloonaa repositorio koneellesi
-2. Luo kansioon .env tiedosto, jonka sisältö on:
-      DATABASE_URL= <tietokannan-paikallinen-osoite>
-      SECRET_KEY=<salainen avain>
+2. Luo kansioon .env tiedosto, jonka sisältö on:<br>
+      DATABASE_URL= tietokannan-paikallinen-osoite<br>
+      SECRET_KEY=salainen avain<br>
 
-3. Aktivoi virtuaaliympäristö: 
-      $ python3 -m venv venv
-      $ source venv/bin/activate
-      $ pip install -r ./requirements.txt
+3. Aktivoi virtuaaliympäristö: <br>
+      $ python3 -m venv venv<br>
+      $ source venv/bin/activate<br>
+      $ pip install -r ./requirements.txt<br>
       
-4. Määritä tietokannan skeema:
+4. Määritä tietokannan skeema:<br>
       $ psql < schema.sql
                          
-5. Käynnistä sovellus:
+5. Käynnistä sovellus:<br>
       $ flask run
 
 
