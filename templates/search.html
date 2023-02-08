@@ -14,7 +14,9 @@
 <p>Songs already bought:</p>
 <br>
 {% for song in results %}
-<li> {{ song.artist }} - {{ song.track }} 
+<li> {{ song.artist }} - {{ song.track }} - <form action="/like" method="POST">
+    <input type="hidden" name="id" value="{{ song.id }}">
+    <input type="submit" value="Like"> </form> - Comment
 {% endfor %}
 </ul>
 <hr>

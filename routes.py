@@ -54,7 +54,7 @@ def search():
     result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
     get_id = result.fetchone()
     user_id = get_id[0]
-    sql = text("SELECT tracks.artist, tracks.track FROM tracks LEFT JOIN tracks_bought ON tracks.id=tracks_bought.track_id WHERE tracks_bought.user_id = :user_id")
+    sql = text("SELECT tracks.id, tracks.artist, tracks.track FROM tracks LEFT JOIN tracks_bought ON tracks.id=tracks_bought.track_id WHERE tracks_bought.user_id = :user_id")
     result = db.session.execute(sql, {"user_id":user_id})
     results = result.fetchall()
     return render_template("search.html", results=results)
@@ -129,3 +129,17 @@ def upload():
         db.session.execute(sql, {"artist":artist, "track":trackname, "genre":genre})
         db.session.commit()
         return redirect("/")
+
+@app.route("/like", methods=["POST"])
+def like():
+    track_id = request.form["id"]
+    username = session["username"]
+    sql_user_id = text("SELECT id FROM users WHERE username LIKE :username")
+    result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
+    get_id = result.fetchone()
+    user_id = get_id[0]
+
+    sql_like = text("INSERT INTO likes (user_id, track_id) VALUES (:user_id, :track_id)")
+    db.session.execute(sql_like, {"user_id":user_id, "track_id":track_id})
+    db.session.commit()
+    return redirect("/")
