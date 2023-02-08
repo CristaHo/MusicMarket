@@ -68,17 +68,25 @@ def search_result():
         sql = text("SELECT id, artist, track FROM tracks WHERE artist LIKE :searchword")
         result = db.session.execute(sql, {"searchword":"%"+searchword+"%"})
         results = result.fetchall()
+        return render_template("search_result.html", results=results)
     
     elif chooseone == "2":
         sql = text("SELECT id, artist, track FROM tracks WHERE track LIKE :searchword")
         result = db.session.execute(sql, {"searchword":"%"+searchword+"%"})
         results = result.fetchall()
+        return render_template("search_result.html", results=results)
 
     elif chooseone == "3":
         sql = text("SELECT id, artist, track FROM tracks WHERE genre LIKE :searchword")
         result = db.session.execute(sql, {"searchword":"%"+searchword+"%"})
         results = result.fetchall()
-    return render_template("search_result.html", results=results)
+        return render_template("search_result.html", results=results)
+
+    ## Testaa tää
+    else:
+        message = "You must choose a search category"
+        return render_template("error.html", message=message)
+    
 
 @app.route("/buy_song", methods=["POST"])
 def buy_song():
@@ -88,12 +96,17 @@ def buy_song():
     result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
     get_id = result.fetchone()
     user_id = get_id[0]
+    sql_track = text("SELECT artist, track FROM tracks WHERE tracks.id = :track_id")
+    sql_track_result = db.session.execute(sql_track, {"track_id":track_id})
+    get_track = sql_track_result.fetchone()
+    artist = get_track[0]
+    track = get_track[1]
 
 
     sql = text("INSERT INTO tracks_bought (user_id, track_id) VALUES (:user_id, :track_id)")
     db.session.execute(sql, {"user_id":user_id, "track_id":track_id})
     db.session.commit()
-    return redirect("/")
+    return render_template("track_bought.html", artist=artist, track=track)
 
 
 
