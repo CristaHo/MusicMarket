@@ -10,13 +10,24 @@
     <input type="submit" value="Search">
 </form>
 <hr>
+<p>All songs:</p>
+<hr>
 
 <p>Songs already bought:</p>
 <br>
 {% for song in results %}
-<li> {{ song.artist }} - {{ song.track }} - <form action="/like" method="POST">
+<li> {{ song.artist }} - {{ song.track }} - 
+    {% if song.coalesce == 0 %}
+    <form action="/like" method="POST">
     <input type="hidden" name="id" value="{{ song.id }}">
-    <input type="submit" value="Like"> </form> - Comment
+    <input type="submit" value="Like"> </form> 
+    {% else %}
+        You liked this song
+    {% endif %}
+    <form action="/comment" method="POST">
+    <input type="hidden" name="id" value="{{ song.id }}">
+    <input type="text" name="comment">
+    <input type="submit" value="Comment"> </form>
 {% endfor %}
 </ul>
 <hr>
