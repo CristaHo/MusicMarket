@@ -48,8 +48,9 @@ def logout():
     return redirect("/")
 
 @app.route("/search", methods=["GET"])
-def search():
-    ## Tee taulu mistä näkee onko tykkäys vai ei, 0, 1. Selectiin mukaan se. 
+def search(): 
+    sql_all_songs = text("SELECT artist, track, genre, price FROM tracks")
+    sql_all_songs1 = db.session.execute(sql_all_songs).fetchall()
     username = session["username"]
     sql_user_id = text("SELECT id FROM users WHERE username LIKE :username")
     result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
@@ -58,7 +59,7 @@ def search():
     sql = text("SELECT DISTINCT tracks.id, COALESCE(likes.id, 0), tracks.artist, tracks.track FROM tracks LEFT JOIN tracks_bought ON tracks.id=tracks_bought.track_id LEFT JOIN likes ON tracks.id=likes.track_id WHERE tracks_bought.user_id = :user_id")
     result = db.session.execute(sql, {"user_id":user_id})
     results = result.fetchall()
-    return render_template("search.html", results=results)
+    return render_template("search.html", results=results, sql_all_songs1=sql_all_songs1)
 
 @app.route("/search_result", methods=["GET"])
 def search_result():
@@ -118,7 +119,7 @@ def upload():
         sql = text("SELECT track, genre FROM tracks WHERE artist LIKE :username")
         result = db.session.execute(sql, {"username":username})
         results = result.fetchall()
-        sql2 = text("SELECT COUNT(tracks_bought.id) FROM tracks_bought LEFT JOIN tracks ON tracks_bought.track_id = tracks.id WHERE tracks.artist LIKE :username")
+        sql2 = text("SELECT SUM(price) FROM tracks INNER JOIN tracks_bought ON tracks.id=tracks_bought.track_id WHERE artist LIKE :username")
         result2 = db.session.execute(sql2, {"username":username})
         bought = result2.fetchone()[0]
         return render_template("upload.html", results=results, bought=bought)
@@ -126,8 +127,9 @@ def upload():
         artist = session["username"]
         trackname = request.form["songname"]
         genre = request.form["genre"]
-        sql = text("INSERT INTO tracks (artist, track, genre, date) VALUES (:artist, :track, :genre, NOW())")
-        db.session.execute(sql, {"artist":artist, "track":trackname, "genre":genre})
+        price = request.form["price"]
+        sql = text("INSERT INTO tracks (artist, track, genre, price, date) VALUES (:artist, :track, :genre, :price, NOW())")
+        db.session.execute(sql, {"artist":artist, "track":trackname, "genre":genre, "price":price})
         db.session.commit()
         return redirect("/")
 
@@ -158,4 +160,8 @@ def comment():
     sql_like = text("INSERT INTO comments (user_id, track_id, comment) VALUES (:user_id, :track_id, :comment)")
     db.session.execute(sql_like, {"user_id":user_id, "track_id":track_id, "comment":comment})
     db.session.commit()
-    return redirect("/")
+    return render_template("comment.html")
+
+@app.route("/track/<int:track_id>")
+def track(track_id):
+    return render_template("track.html")

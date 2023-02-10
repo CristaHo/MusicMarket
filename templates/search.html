@@ -11,6 +11,10 @@
 </form>
 <hr>
 <p>All songs:</p>
+{% for track in sql_all_songs1 %}
+<li>{{ track.artist }} - {{ track.track }} - {{ track.genre }} - {{ track.price }}</li>
+{% endfor %}
+
 <hr>
 
 <p>Songs already bought:</p>
