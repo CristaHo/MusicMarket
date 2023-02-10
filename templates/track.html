@@ -1,0 +1,8 @@
+<h2>This track is {{ artist }} - {{ track }}</h2>
+
+<p>This track has {{ likes }} likes.</p>
+
+<p>Comments:</p>
+{% for comment in comments %}
+<p>{{ comment[0] }}</p>
+{% endfor %}

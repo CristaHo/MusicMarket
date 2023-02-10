@@ -164,4 +164,9 @@ def comment():
 
 @app.route("/track/<int:track_id>")
 def track(track_id):
-    return render_template("track.html")
+    sql = db.session.execute(text("SELECT artist, track FROM tracks WHERE id = :track_id"), {"track_id":track_id}).fetchone()
+    artist = sql[0]
+    track = sql[1]
+    likes = db.session.execute(text("SELECT COUNT(id) FROM likes WHERE likes.track_id = :track_id"), {"track_id":track_id}).fetchone()[0]
+    comments = db.session.execute(text("SELECT comment FROM comments WHERE comments.track_id = :track_id"), {"track_id":track_id}).fetchall()
+    return render_template("track.html", artist=artist, track=track, likes=likes, comments=comments)
