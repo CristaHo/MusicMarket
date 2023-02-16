@@ -1,10 +1,13 @@
-{% if session.username %}
-<h1>MusicMarket</h1>
-<p>You are logged in with the username: {{ session.username }}</p>
 
+<body>
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
+{% if session.username %}
+
+<p>You are logged in with the username: {{ session.username }}</p>
 <br>
-<button><a href="/search">Buy and search for music</a></button>
-<button><a href="/upload">Upload your songs</a></button>
+<p>On this app you can search and buy tracks and upload your own ones. All kinds and all genres. Remember to like and comment the tracks you enjoyed!</p>
 <br>
 <hr>
 <a href="/logout">Log out</a>
@@ -16,5 +19,7 @@
 <input type="password" name="password"></p>
 <input type="submit" value="Login">
 </form>
-<p>No account yet? <button><a href="/register">Register new account</a></button>
+<p>No account yet? <button><a href="/register">Register new account</a></button></p>
 {% endif %}
+{% endblock %}
+</body>
