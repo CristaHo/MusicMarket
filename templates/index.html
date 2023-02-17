@@ -5,12 +5,11 @@
 {% block content %}
 {% if session.username %}
 
-<p>You are logged in with the username: {{ session.username }}</p>
+<h3>You are logged in with the username: {{ session.username }}</h3>
 <br>
 <p>On this app you can search and buy tracks and upload your own ones. All kinds and all genres. Remember to like and comment the tracks you enjoyed!</p>
 <br>
-<hr>
-<a href="/logout">Log out</a>
+
 {% else %}
 <form action="/login" method="POST">
 <p>Username:<br>

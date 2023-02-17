@@ -4,27 +4,96 @@
         body {
         margin: auto;
         max-width: 45em;
-        font-family: 'Helvetica', 'Arial', sans-serif;
-        background-color: CCDDB7;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        background-color: white;
         }
 
+        .Music_market {
+            font-size: 30px;
+            font-family: "Impact";
+            color: rgb(255, 255, 255);
+            line-height: 1.2;
+            text-shadow: 0px 18px 26.22px rgba(57, 51, 51, 0.26);
+            background-image: url("/templates/headerobject.jpeg");
+}
         .header {
-            background-color: 88D18A;
-            color: 464F51;
-            padding: 3em 2em;
-            margin-right: solid 5px
+            background-color: #6782A2;
+            background-image:linear-gradient(to bottom right, #6782A2, #465A72);
+            text-shadow: 2px 2px #465A72;
+            color: 1D2D44;
+            font-size: 32px;
+            padding: 50px 0 45px 60px;
+            border: solid 2px;
+            border-color: 1D2D44;
+            border-radius: 0 80px 0 80px;
+            margin-top: 10px;
+            font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
 
         .nav {
-            background-color: 343434;
+            margin-top: 5px;
             color: 88D18A;
-            padding: 1.5em
+            padding: 1em 1em 1em 1em;
+            text-align: center;
         }
 
         .page {
-            background-color: 88D18A;
-            color: 464F51;
+            margin-top: 5px;
+            background-color: BCCDDC;
+            color: #1f2733;
+            border: solid 2px;
+            border-color: 1D2D44;
+            padding: 20px 20px 20px 20px;
+            font-size: 18px;
         }
+
+        a.nav:link, a.nav:visited {
+            background-color: 5C7699;
+            color: white;
+            padding: 12px 22px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 20px;
+            border: solid 1px;
+            border-color: 1D2D44;
+            font-size: 18px; 
+        }
+        
+        a.nav:hover {
+            color: black;
+        
+        }
+
+        a.links:link, a.links:visited {
+            color: rgb(52, 69, 92);
+            text-decoration: none;
+        }
+
+        a.links:hover {
+            color: grey;
+        
+        }
+
+        tr.tracks:hover { 
+            background: #5C7699;
+            color: white;
+            border-left-color: #5C7699; 
+            border: 0px;
+            margin: 0px;
+        }
+        
+        td a:link, a:visited { 
+            display: block; 
+            color: rgb(52, 69, 92);
+            padding: 16px; 
+            text-decoration: none;
+        }
+
+        input[type=text] {
+            border: 2px solid red;
+            border-radius: 4px;
+        }       
         
     </style>
 </head>
@@ -36,14 +105,14 @@
 </div>
 
 <div class="nav">
-<a href="/">Frontpage</a>
-<a href="/search">Search and buy music</a>
-<a href="/upload">Upload your songs</a>
-TESTING
+    
+<a class="nav" href="/">Frontpage</a>
+<a class="nav" href="/search">Search and buy music</a>
+<a class="nav" href="/upload">Upload your songs</a>
+    
 </div>
-<hr>
 <div class="page">
 {% block content %}{% endblock %}
 <hr>
-Voit lähettää palautetta <a href="#">tästä</a>
+<a class="nav" href="">Log out</a>
 </body>
