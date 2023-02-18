@@ -1,4 +1,8 @@
-<h3>Search and buy music</h3>
+<body>
+    {% extends "layout.html" %}
+    {% block title %}Etusivu{% endblock %}
+    {% block content %}
+<h2>Search and buy music</h2>
 <form action="/search_result" method="GET">  
     <label for="artist">Artist</label>
     <input type="radio" name="chooseone" id="artist" value="1">
@@ -7,33 +11,58 @@
     <div><label for="genre">Genre</label>
         <input type="radio" name="chooseone" id="genre" value="3"></div>
     <input type="text" name="searchword"> 
-    <input type="submit" value="Search">
+    <input type="submit" class="button" value="Search">
 </form>
 <hr>
-<p>All songs:</p>
-{% for track in sql_all_songs1 %}
-<li>{{ track.artist }} - {{ track.track }} - {{ track.genre }} - {{ track.price }}</li>
-{% endfor %}
 
+<p>All songs:</p>
+<table class="all_tracks">
+    <tr class="not_these">
+        <th>Artist</th>
+        <th>Track</th>
+        <th>Genre</th>
+        <th>Price</th>
+    </tr>
+{% for track in sql_all_songs1 %}
+<tr class="tracks">
+    <td><a href="/track/{{ track.id }}">{{ track.artist }}</a></td>
+    <td><a href="/track/{{ track.id }}">{{ track.track }}</a></td>
+    <td><a href="/track/{{ track.id }}">{{ track.genre }}</a></td>
+    <td><a href="/track/{{ track.id }}">{{ track.price }}</a></td>
+    </tr>
+{% endfor %}
+</table>
 <hr>
 
 <p>Songs already bought:</p>
 <br>
+<table class="all_tracks">
+    <tr>
+        <th>Artist</th>
+        <th>Track</th>
+        <th>Like</th>
+        <th>Comment</th>
+    </tr>
 {% for song in results %}
-<li> {{ song.artist }} - {{ song.track }} - 
+<tr class="tracks">
+    <td><a href="/track/{{ song.id }}">{{ song.artist }}</a></td>
+    <td><a href="/track/{{ song.id }}">{{ song.track }}</a></td>
+    <td> 
     {% if song.coalesce == 0 %}
     <form action="/like" method="POST">
     <input type="hidden" name="id" value="{{ song.id }}">
     <input type="submit" value="Like"> </form> 
     {% else %}
-        You liked this song
-    {% endif %}
+        LIKED!
+    {% endif %}</td>
+    <td>
     <form action="/comment" method="POST">
     <input type="hidden" name="id" value="{{ song.id }}">
-    <input type="text" name="comment">
-    <input type="submit" value="Comment"> </form>
+    <input class="comment" type="text" name="comment">
+    <input type="submit" value="Comment"> </form></td>
+    </tr>
 {% endfor %}
-</ul>
-<hr>
-<a href="/">Back</a>
+</table>
 
+{% endblock %}
+</body>

@@ -48,8 +48,11 @@ def logout():
     return redirect("/")
 
 @app.route("/search", methods=["GET"])
+## user_id mukaan kaikkien biisien hakuun
+## tee myös genrejuttu
+## sit 
 def search(): 
-    sql_all_songs = text("SELECT artist, track, genre, price FROM tracks")
+    sql_all_songs = text("SELECT tracks.id, tracks.artist, tracks.track, tracks.genre, tracks.price FROM tracks LEFT JOIN users ON tracks.artist=users.username")
     sql_all_songs1 = db.session.execute(sql_all_songs).fetchall()
     username = session["username"]
     sql_user_id = text("SELECT id FROM users WHERE username LIKE :username")
@@ -85,7 +88,7 @@ def search_result():
         return render_template("search_result.html", results=results)
 
     ## Testaa tää
-    else:
+    elif chooseone == "":
         message = "You must choose a search category"
         return render_template("error.html", message=message)
     
@@ -168,5 +171,13 @@ def track(track_id):
     artist = sql[0]
     track = sql[1]
     likes = db.session.execute(text("SELECT COUNT(id) FROM likes WHERE likes.track_id = :track_id"), {"track_id":track_id}).fetchone()[0]
-    comments = db.session.execute(text("SELECT comment FROM comments WHERE comments.track_id = :track_id"), {"track_id":track_id}).fetchall()
+    comments = db.session.execute(text("SELECT comments.comment, users.username FROM comments INNER JOIN users ON comments.user_id=users.id WHERE comments.track_id = :track_id"), {"track_id":track_id}).fetchall()
     return render_template("track.html", artist=artist, track=track, likes=likes, comments=comments)
+
+@app.route("/artist/<int:user_id>")
+def artist(user_id):
+    sql = db.session.execute(text("SELECT track, genre FROM tracks WHERE artist = :user_id"), {"user_id":user_id}).fetchall()
+    
+    ##likes = db.session.execute(text("SELECT COUNT(id) FROM likes WHERE likes.track_id = :track_id"), {"track_id":track_id}).fetchone()[0]
+    ##comments = db.session.execute(text("SELECT comment FROM comments WHERE comments.track_id = :track_id"), {"track_id":track_id}).fetchall()
+    return render_template("artist.html", sql=sql)

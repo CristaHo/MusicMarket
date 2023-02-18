@@ -1,13 +1,18 @@
-<table>
+<body>
+    {% extends "layout.html" %}
+    {% block title %}Etusivu{% endblock %}
+    {% block content %}
+    
+    <ul>
 {% for song in results %}
-<tr> <td>{{ song.artist }}</td> 
-    <td>-</td>
-    <td><a href="/track/{{ song.id }}">{{ song.track }}</a></td>
-    <td><form action="/buy_song" method="POST">
+<li><a href="/track/{{ song.id }}">{{ song.artist }} - {{ song.track }}</a>
+    <form action="/buy_song" method="POST">
         <input type="hidden" name="id" value="{{ song.id }}">
-        <input type="submit" value="Buy"> </form></td></tr>
+        <input type="submit" value="Buy"> </form></li>
 {% endfor %}
-</table>
+</ul>
 <hr>
 <a href="/search">Back to search</a>
 <a href="/">Back to frontpage</a>
+{% endblock %}
+</body>

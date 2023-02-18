@@ -1,3 +1,7 @@
+<body>
+    {% extends "layout.html" %}
+    {% block title %}Etusivu{% endblock %}
+    {% block content %}
 <h2>Upload your song</h2>
 <form action="/upload" method="POST">
 <p>Track name:<br>
@@ -18,3 +22,5 @@
 <hr>
 <p>You have earned {{ bought}} euros</p>
 <a href="/">Back</a>
+{% endblock %}
+</body>
