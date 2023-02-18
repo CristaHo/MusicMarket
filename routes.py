@@ -59,7 +59,7 @@ def search():
     result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
     get_id = result.fetchone()
     user_id = get_id[0]
-    sql = text("SELECT DISTINCT tracks.id, COALESCE(likes.id, 0), tracks.artist, tracks.track FROM tracks LEFT JOIN tracks_bought ON tracks.id=tracks_bought.track_id LEFT JOIN likes ON tracks.id=likes.track_id WHERE tracks_bought.user_id = :user_id")
+    sql = text("SELECT DISTINCT tracks.artist, tracks.track, tracks.id, COALESCE(l.track_id, 0) FROM (SELECT DISTINCT tracks_bought.track_id, tracks_bought.user_id FROM tracks_bought) AS tb INNER JOIN tracks ON tracks.id=tb.track_id LEFT JOIN (SELECT DISTINCT user_id, track_id FROM likes) AS l ON tb.track_id=l.track_id WHERE tb.user_id= :user_id")
     result = db.session.execute(sql, {"user_id":user_id})
     results = result.fetchall()
     return render_template("search.html", results=results, sql_all_songs1=sql_all_songs1)
