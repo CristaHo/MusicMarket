@@ -1,14 +1,20 @@
+<body>
+    {% extends "layout.html" %}
+    {% block title %}Etusivu{% endblock %}
+    {% block content %}
 {% if register == False %}
 <form action="/register" method="POST">
-<p>Tunnus:<br>
+<p>Username:<br>
 <input type="text" name="username"></p>
-<p>Salasana:<br>
+<p>Password:<br>
 <input type="password" name="password1"></p>
-<p>Salasana uudestaan:<br>
+<p>Confirm password:<br>
 <input type="password" name="password2"></p>
-<input type="submit" value="Kirjaudu">
+<input type="submit" value="Register">
 </form>
 {% else %}
-<p>Olet nyt rekisteröitynyt</p>
-<a href="/">Takaisin etusivulle</a>
+<p>You have registered a new account!</p>
+<a href="/">Login</a>
 {% endif %}
+{% endblock %}
+</body>
