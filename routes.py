@@ -52,17 +52,20 @@ def logout():
 ## tee myös genrejuttu
 ## sit 
 def search(): 
-    sql_all_songs = text("SELECT tracks.id, tracks.artist, tracks.track, tracks.genre, tracks.price FROM tracks LEFT JOIN users ON tracks.artist=users.username")
-    sql_all_songs1 = db.session.execute(sql_all_songs).fetchall()
-    username = session["username"]
-    sql_user_id = text("SELECT id FROM users WHERE username LIKE :username")
-    result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
-    get_id = result.fetchone()
-    user_id = get_id[0]
-    sql = text("SELECT DISTINCT tracks.artist, tracks.track, tracks.id, COALESCE(l.track_id, 0) FROM (SELECT DISTINCT tracks_bought.track_id, tracks_bought.user_id FROM tracks_bought) AS tb INNER JOIN tracks ON tracks.id=tb.track_id LEFT JOIN (SELECT DISTINCT user_id, track_id FROM likes) AS l ON tb.track_id=l.track_id WHERE tb.user_id= :user_id")
-    result = db.session.execute(sql, {"user_id":user_id})
-    results = result.fetchall()
-    return render_template("search.html", results=results, sql_all_songs1=sql_all_songs1)
+    if "username" in session:
+        sql_all_songs = text("SELECT tracks.id, tracks.artist, tracks.track, tracks.genre, tracks.price FROM tracks LEFT JOIN users ON tracks.artist=users.username")
+        sql_all_songs1 = db.session.execute(sql_all_songs).fetchall()
+        username = session["username"]
+        sql_user_id = text("SELECT id FROM users WHERE username LIKE :username")
+        result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
+        get_id = result.fetchone()
+        user_id = get_id[0]
+        sql = text("SELECT DISTINCT tracks.artist, tracks.track, tracks.id, COALESCE(l.track_id, 0) FROM (SELECT DISTINCT tracks_bought.track_id, tracks_bought.user_id FROM tracks_bought) AS tb INNER JOIN tracks ON tracks.id=tb.track_id LEFT JOIN (SELECT DISTINCT user_id, track_id FROM likes) AS l ON tb.track_id=l.track_id WHERE tb.user_id= :user_id")
+        result = db.session.execute(sql, {"user_id":user_id})
+        results = result.fetchall()
+        return render_template("search.html", results=results, sql_all_songs1=sql_all_songs1, user_id=user_id, username=username)
+    else:
+        return render_template("error.html", message="You have to login or register first")
 
 @app.route("/search_result", methods=["GET"])
 def search_result():
@@ -117,24 +120,27 @@ def buy_song():
 
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
-    if request.method == "GET":
-        username = session["username"]
-        sql = text("SELECT track, genre FROM tracks WHERE artist LIKE :username")
-        result = db.session.execute(sql, {"username":username})
-        results = result.fetchall()
-        sql2 = text("SELECT SUM(price) FROM tracks INNER JOIN tracks_bought ON tracks.id=tracks_bought.track_id WHERE artist LIKE :username")
-        result2 = db.session.execute(sql2, {"username":username})
-        bought = result2.fetchone()[0]
-        return render_template("upload.html", results=results, bought=bought)
-    if request.method == "POST":
-        artist = session["username"]
-        trackname = request.form["songname"]
-        genre = request.form["genre"]
-        price = request.form["price"]
-        sql = text("INSERT INTO tracks (artist, track, genre, price, date) VALUES (:artist, :track, :genre, :price, NOW())")
-        db.session.execute(sql, {"artist":artist, "track":trackname, "genre":genre, "price":price})
-        db.session.commit()
-        return redirect("/")
+    if "username" in session:
+        if request.method == "GET":
+            username = session["username"]
+            sql = text("SELECT track, genre FROM tracks WHERE artist LIKE :username")
+            result = db.session.execute(sql, {"username":username})
+            results = result.fetchall()
+            sql2 = text("SELECT SUM(price) FROM tracks INNER JOIN tracks_bought ON tracks.id=tracks_bought.track_id WHERE artist LIKE :username")
+            result2 = db.session.execute(sql2, {"username":username})
+            bought = result2.fetchone()[0]
+            return render_template("upload.html", results=results, bought=bought)
+        if request.method == "POST":
+            artist = session["username"]
+            trackname = request.form["songname"]
+            genre = request.form["genre"]
+            price = request.form["price"]
+            sql = text("INSERT INTO tracks (artist, track, genre, price, date) VALUES (:artist, :track, :genre, :price, NOW())")
+            db.session.execute(sql, {"artist":artist, "track":trackname, "genre":genre, "price":price})
+            db.session.commit()
+            return redirect("/")
+    else:
+        return render_template("error.html", message="You have to login or register first")
 
 @app.route("/like", methods=["POST"])
 def like():
