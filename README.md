@@ -11,12 +11,13 @@ Toiminnot:
   - Musiikkia voi hakea genren/nimen mukaan
   - Kappaleille voi antaa tykkäyksiä/kommentteja
 
-Tällä hetkellä sovelluksessa toimivat muut ominaisuudet paitsi tykkäys/kommentointi.
+Tällä hetkellä sovelluksessa toimivat kaikki ominaisuudet.
 Sovellukseen voi luoda uuden käyttäjän ja kirjautua sillä siään.
 Kappaletta haettaessa tulee valita jokin hakukriteeri, jotta haku onnistuu.
 Tietokantaan on tallennettu yksi kappale nimellä TheArtist - TheTrack, genrenä rock.
 Tällä hetkellä kappaleen ostamisen jälkeen ohjataan käyttäjä etusivulle, tämän tulen vielä muuttamaan.
 Kappaleita ladattaessa näkyy alhaalla jo ladatut omat kappaleet, sekä kuinka monen euon edestä kappaleita on ostettu. 
+Sovelluksen ulkoasua on muokattu, mutta osa sivuista ei vielä ole uudessa layoutissa.
 
 Sovellus ei ole vielä saatavilla fly.io:ssa, sillä en kerennyt saada sitä toimimaan.
 
