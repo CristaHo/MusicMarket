@@ -1,7 +1,8 @@
 <body>
-    {% extends "layout.html" %}
-    {% block title %}Etusivu{% endblock %}
-    {% block content %}
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
+{% if session.username %}
 <h2>Search and buy music</h2>
 <form action="/search_result" method="GET">  
     <label for="artist">Artist</label>
@@ -22,6 +23,7 @@
         <th>Track</th>
         <th>Genre</th>
         <th>Price</th>
+        <th>Buy</th>
     </tr>
 {% for track in sql_all_songs1 %}
 <tr class="tracks">
@@ -29,13 +31,16 @@
     <td><a href="/track/{{ track.id }}">{{ track.track }}</a></td>
     <td><a href="/track/{{ track.id }}">{{ track.genre }}</a></td>
     <td><a href="/track/{{ track.id }}">{{ track.price }}</a></td>
+    <td>
+        <form action="/buy_song" method="POST">
+            <input type="hidden" name="id" value="{{ track.id }}">
+            <input type="submit" value="Buy"> </form></td>
     </tr>
 {% endfor %}
 </table>
 <hr>
 
 <p>Songs already bought:</p>
-<br>
 <table class="all_tracks">
     <tr>
         <th>Artist</th>
@@ -48,7 +53,7 @@
     <td><a href="/track/{{ song.id }}">{{ song.artist }}</a></td>
     <td><a href="/track/{{ song.id }}">{{ song.track }}</a></td>
     <td> 
-    {% if song.coalesce == 0 %}
+    {% if song.liked == 0 %}
     <form action="/like" method="POST">
     <input type="hidden" name="id" value="{{ song.id }}">
     <input type="submit" value="Like"> </form> 
@@ -63,6 +68,8 @@
     </tr>
 {% endfor %}
 </table>
-
+{% else %}
+<p>You have to register first</p>
+{% endif %}
 {% endblock %}
 </body>

@@ -44,8 +44,11 @@ def register():
 
 @app.route("/logout")
 def logout():
-    del session["username"]
-    return redirect("/")
+    if "username" in session:
+        del session["username"]
+        return redirect("/")
+    else:
+        return redirect("/")
 
 @app.route("/search", methods=["GET"])
 ## user_id mukaan kaikkien biisien hakuun
@@ -154,7 +157,9 @@ def like():
     sql_like = text("INSERT INTO likes (user_id, track_id) VALUES (:user_id, :track_id)")
     db.session.execute(sql_like, {"user_id":user_id, "track_id":track_id})
     db.session.commit()
-    return redirect("/")
+    sql_update = text("UPDATE tracks_bought SET liked = 1 WHERE id = :track_id")
+    db.session.execute(sql_update, {"track_id":track_id})
+    return render_template("liked.html")
 
 @app.route("/comment", methods=["POST"])
 def comment():
