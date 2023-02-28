@@ -5,6 +5,7 @@ from os import getenv
 import users
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
+import secrets
 
 app.secret_key = getenv("SECRET_KEY")
 
@@ -18,6 +19,7 @@ def login():
     password = request.form["password"]
     if users.login(username, password):
         session["username"] = username
+        session["csrf_token"] = secrets.token_hex(16)
         return redirect("/")
     
     else:
@@ -93,14 +95,13 @@ def search_result():
         results = result.fetchall()
         return render_template("search_result.html", results=results)
 
-    ## Testaa tää
-    elif chooseone == "":
-        message = "You must choose a search category"
-        return render_template("error.html", message=message)
+    
     
 
 @app.route("/buy_song", methods=["POST"])
 def buy_song():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     track_id = request.form["id"]
     username = session["username"]
     sql_user_id = text("SELECT id FROM users WHERE username LIKE :username")
@@ -134,6 +135,8 @@ def upload():
             bought = result2.fetchone()[0]
             return render_template("upload.html", results=results, bought=bought)
         if request.method == "POST":
+            if session["csrf_token"] != request.form["csrf_token"]:
+                abort(403)
             artist = session["username"]
             trackname = request.form["songname"]
             genre = request.form["genre"]
@@ -141,24 +144,24 @@ def upload():
             sql = text("INSERT INTO tracks (artist, track, genre, price) VALUES (:artist, :track, :genre, :price)")
             db.session.execute(sql, {"artist":artist, "track":trackname, "genre":genre, "price":price})
             db.session.commit()
-            return redirect("/")
+            return render_template("uploaded.html")
     else:
         return render_template("error.html", message="You have to login or register first")
 
 @app.route("/like", methods=["POST"])
 def like():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     track_id = request.form["id"]
     username = session["username"]
     sql_user_id = text("SELECT id FROM users WHERE username LIKE :username")
-    result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
+    result = db.session.execute(sql_user_id, {"username":username})
     get_id = result.fetchone()
     user_id = get_id[0]
 
     sql_like = text("INSERT INTO likes (user_id, track_id) VALUES (:user_id, :track_id)")
     db.session.execute(sql_like, {"user_id":user_id, "track_id":track_id})
-    db.session.commit()
-    sql_update = text("UPDATE tracks_bought SET liked = 1 WHERE id = :track_id")
-    db.session.execute(sql_update, {"track_id":track_id})
     db.session.commit()
 
     sql_track = text("SELECT artist, track FROM tracks WHERE id= :track_id")
@@ -170,6 +173,9 @@ def like():
 
 @app.route("/comment", methods=["POST"])
 def comment():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     track_id = request.form["id"]
     username = session["username"]
     sql_user_id = text("SELECT id FROM users WHERE username LIKE :username")

@@ -20,6 +20,7 @@
     <td>
     <form action="/buy_song" method="POST">
         <input type="hidden" name="id" value="{{ song.id }}">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" class="button" value="Buy"> </form></td></tr>
 {% endfor %}
     </table>

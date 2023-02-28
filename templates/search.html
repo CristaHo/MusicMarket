@@ -34,6 +34,7 @@
     <td class="buy">
         <form action="/buy_song" method="POST">
             <input type="hidden" name="id" value="{{ track.id }}">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <input type="submit" class="button" value="Buy"> </form></td>
     </tr>
 {% endfor %}
@@ -56,7 +57,8 @@
     {% if song.coalesce == 0 %}
     <form action="/like" method="POST">
     <input type="hidden" name="id" value="{{ song.id }}">
-    <input type="submit" value="Like"> </form> 
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    <input class="likebutton" type="submit" value="Like"> </form> 
     {% else %}
         LIKED!
     {% endif %}</td>
@@ -64,6 +66,7 @@
     <form action="/comment" method="POST">
     <input type="hidden" name="id" value="{{ song.id }}">
     <input class="comment" type="text" name="comment">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" class="button" value="Comment"> </form></td>
     </tr>
 {% endfor %}

@@ -1,4 +1,4 @@
-# fly.toml file generated for musicmarket on 2023-02-05T21:26:38+02:00
+# fly.toml file generated for musicmarket on 2023-02-28T15:06:40+02:00
 
 app = "musicmarket"
 kill_signal = "SIGINT"
