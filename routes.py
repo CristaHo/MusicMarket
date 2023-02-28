@@ -63,7 +63,7 @@ def search():
         result = db.session.execute(sql_user_id, {"username":"%"+username+"%"})
         get_id = result.fetchone()
         user_id = get_id[0]
-        sql = text("SELECT DISTINCT tracks.artist, tracks.track, tracks.id, COALESCE(l.track_id, 0) FROM (SELECT DISTINCT tracks_bought.track_id, tracks_bought.user_id FROM tracks_bought) AS tb INNER JOIN tracks ON tracks.id=tb.track_id LEFT JOIN (SELECT DISTINCT user_id, track_id FROM likes) AS l ON tb.track_id=l.track_id WHERE tb.user_id= :user_id")
+        sql = text("SELECT tracks.id, tracks.artist, tracks.track, COALESCE(l.track_id, 0) FROM tracks LEFT JOIN (SELECT likes.track_id, likes.user_id FROM likes WHERE likes.user_id= :user_id) AS l  ON tracks.id=l.track_id JOIN tracks_bought ON tracks.id=tracks_bought.track_id WHERE tracks_bought.user_id= :user_id")
         result = db.session.execute(sql, {"user_id":user_id})
         results = result.fetchall()
         return render_template("search.html", results=results, sql_all_songs1=sql_all_songs1, user_id=user_id, username=username)
@@ -76,19 +76,19 @@ def search_result():
     searchword = request.args["searchword"]
 
     if chooseone == "1":
-        sql = text("SELECT id, artist, track FROM tracks WHERE artist LIKE :searchword")
+        sql = text("SELECT id, artist, track, genre, price FROM tracks WHERE artist LIKE :searchword")
         result = db.session.execute(sql, {"searchword":"%"+searchword+"%"})
         results = result.fetchall()
         return render_template("search_result.html", results=results)
     
     elif chooseone == "2":
-        sql = text("SELECT id, artist, track FROM tracks WHERE track LIKE :searchword")
+        sql = text("SELECT id, artist, track, genre, price FROM tracks WHERE track LIKE :searchword")
         result = db.session.execute(sql, {"searchword":"%"+searchword+"%"})
         results = result.fetchall()
         return render_template("search_result.html", results=results)
 
     elif chooseone == "3":
-        sql = text("SELECT id, artist, track FROM tracks WHERE genre LIKE :searchword")
+        sql = text("SELECT id, artist, track, genre, price FROM tracks WHERE genre LIKE :searchword")
         result = db.session.execute(sql, {"searchword":"%"+searchword+"%"})
         results = result.fetchall()
         return render_template("search_result.html", results=results)
@@ -126,7 +126,7 @@ def upload():
     if "username" in session:
         if request.method == "GET":
             username = session["username"]
-            sql = text("SELECT track, genre FROM tracks WHERE artist LIKE :username")
+            sql = text("SELECT id, track, genre FROM tracks WHERE artist LIKE :username")
             result = db.session.execute(sql, {"username":username})
             results = result.fetchall()
             sql2 = text("SELECT SUM(price) FROM tracks INNER JOIN tracks_bought ON tracks.id=tracks_bought.track_id WHERE artist LIKE :username")
@@ -138,7 +138,7 @@ def upload():
             trackname = request.form["songname"]
             genre = request.form["genre"]
             price = request.form["price"]
-            sql = text("INSERT INTO tracks (artist, track, genre, price, date) VALUES (:artist, :track, :genre, :price, NOW())")
+            sql = text("INSERT INTO tracks (artist, track, genre, price) VALUES (:artist, :track, :genre, :price)")
             db.session.execute(sql, {"artist":artist, "track":trackname, "genre":genre, "price":price})
             db.session.commit()
             return redirect("/")
@@ -159,7 +159,14 @@ def like():
     db.session.commit()
     sql_update = text("UPDATE tracks_bought SET liked = 1 WHERE id = :track_id")
     db.session.execute(sql_update, {"track_id":track_id})
-    return render_template("liked.html")
+    db.session.commit()
+
+    sql_track = text("SELECT artist, track FROM tracks WHERE id= :track_id")
+    result = db.session.execute(sql_track, {"track_id":track_id})
+    the_track = result.fetchone()
+    artist = the_track[0]
+    track = the_track[1]
+    return render_template("liked.html", artist=artist, track=track)
 
 @app.route("/comment", methods=["POST"])
 def comment():
