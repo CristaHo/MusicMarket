@@ -15,7 +15,7 @@
             line-height: 1.2;
             text-shadow: 0px 18px 26.22px rgba(57, 51, 51, 0.26);
             background-image: url("/templates/headerobject.jpeg");
-}
+        }
         .header {
             background-color: #6782A2;
             background-image:linear-gradient(to bottom right, #6782A2, #465A72);
@@ -98,11 +98,25 @@
             color: rgb(52, 69, 92);
         }
 
+        .buy {
+            padding-top: 2px;
+        }
+
         input[type=text] {
             border: 2px solid rgb(81, 102, 131);
             border-radius: 4px;
-        }  
+        } 
         
+        input[type=password] {
+            border: 2px solid rgb(81, 102, 131);
+            border-radius: 4px;
+        }
+        
+        input[type=number] {
+            border: 2px solid rgb(81, 102, 131);
+            border-radius: 4px;
+        }
+
         .button {
             background-color: #5C7699;
             color: white;
@@ -127,13 +141,32 @@
             color: white;
         }
 
-        .comment {
-            transition: width 0.4s ease-in-out;
-}
-        }
+
 
         .comment:focus {
             width: 100%;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 50px 1fr;
+            
+        }
+
+        .grid-item1 {
+            grid-area: "upload";
+            grid-row: span 2;
+        }
+
+        .grid-item2 {
+            grid-area: "tracks";
+            
+        }
+
+        .grid-item3 {
+            grid-area: "earnings";
+            
         }
         
         

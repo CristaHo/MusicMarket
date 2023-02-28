@@ -3,16 +3,26 @@
     {% block title %}Etusivu{% endblock %}
     {% block content %}
     
-    <ul>
+    <table class="all_tracks">
+        <tr>
+            <th>Artist</th>
+            <th>Track</th>
+            <th>Genre</th>
+            <th>Price</th>
+            <th>Buy</th>
+        </tr>
 {% for song in results %}
-<li><a href="/track/{{ song.id }}">{{ song.artist }} - {{ song.track }}</a>
+<tr>
+    <td><a href="/track/{{ song.id }}">{{ song.artist }}</a></td>
+    <td><a href="/track/{{ song.id }}">{{ song.track }}</a></td>
+    <td><a href="/track/{{ song.id }}">{{ song.genre }}</a></td>
+    <td><a href="/track/{{ song.id }}">{{ song.price }}</a></td>
+    <td>
     <form action="/buy_song" method="POST">
         <input type="hidden" name="id" value="{{ song.id }}">
-        <input type="submit" value="Buy"> </form></li>
+        <input type="submit" class="button" value="Buy"> </form></td></tr>
 {% endfor %}
-</ul>
-<hr>
-<a href="/search">Back to search</a>
-<a href="/">Back to frontpage</a>
+    </table>
+
 {% endblock %}
 </body>

@@ -16,7 +16,7 @@
 </form>
 <hr>
 
-<p>All songs:</p>
+<p>All tracks:</p>
 <table class="all_tracks">
     <tr class="not_these">
         <th>Artist</th>
@@ -31,16 +31,16 @@
     <td><a href="/track/{{ track.id }}">{{ track.track }}</a></td>
     <td><a href="/track/{{ track.id }}">{{ track.genre }}</a></td>
     <td><a href="/track/{{ track.id }}">{{ track.price }}</a></td>
-    <td>
+    <td class="buy">
         <form action="/buy_song" method="POST">
             <input type="hidden" name="id" value="{{ track.id }}">
-            <input type="submit" value="Buy"> </form></td>
+            <input type="submit" class="button" value="Buy"> </form></td>
     </tr>
 {% endfor %}
 </table>
 <hr>
 
-<p>Songs already bought:</p>
+<p>Tracks already bought:</p>
 <table class="all_tracks">
     <tr>
         <th>Artist</th>
@@ -53,7 +53,7 @@
     <td><a href="/track/{{ song.id }}">{{ song.artist }}</a></td>
     <td><a href="/track/{{ song.id }}">{{ song.track }}</a></td>
     <td> 
-    {% if song.liked == 0 %}
+    {% if song.coalesce == 0 %}
     <form action="/like" method="POST">
     <input type="hidden" name="id" value="{{ song.id }}">
     <input type="submit" value="Like"> </form> 
@@ -64,7 +64,7 @@
     <form action="/comment" method="POST">
     <input type="hidden" name="id" value="{{ song.id }}">
     <input class="comment" type="text" name="comment">
-    <input type="submit" value="Comment"> </form></td>
+    <input type="submit" class="button" value="Comment"> </form></td>
     </tr>
 {% endfor %}
 </table>
